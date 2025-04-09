@@ -1,13 +1,4 @@
 ---
-project:
-  type: website
-  output-dir: docs
-website:
-  title: "Personal project workspace"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
 title: Personal_project_workspace
 authors:
   - name: Eleanor Lindsey
