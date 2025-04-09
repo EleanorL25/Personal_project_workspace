@@ -1,0 +1,57 @@
+---
+title: Personal_project_workspace
+authors:
+  - name: Eleanor Lindsey
+    affiliation: Colorado State University
+    roles: writing
+    corresponding: True
+  - name: Clara Jordan 
+    affiliation: Colorado State University
+    roles: writing
+    corresponding: False
+  - name: Sierra Champion
+    affiliation: Colorado State University
+    roles: writing
+    corresponding: False
+bibliography: references.bib
+---
+
+## The Relationship of Tree Canopy to Urban Heat Effect and Inequality: A Case Study
+
+### Introduction
+
+Due to the effects of climate change, large cities like Los Angeles, California, are expected to see regularly increasing temperatures. When looking at a heat map, an odd phenomenon shows higher temperatures within city limits than in rural areas on the border. This unequal heating is called the Urban Heat Island (UHI) effect [@HeatislandHealthEffects]. This is due to reduced vegetation cover, increased concrete, disruptive buildings, and human activities. This effect is projected to worsen as more of the world’s population migrates to urban environments, cities continue to grow, and climate change increases temperatures across the board [@HeatIslandTrends]. Areas already impacted by the UHI effect will “bear the brunt” of intensified heat waves brought on by climate change [@HeatIslandTrends].
+
+From the 1980s onwards, environmental movements began to advocate for increased green space and sustainability in urban planning. Initiatives promoting tree canopy restoration, urban greening, and the creation of parks have been prioritized to mitigate the impacts of climate change and improve public health. Importantly, the city has recognized the need to address the disproportionate effects of urban heat on low-income communities. However, despite these efforts, many neighborhoods still struggle with heat exposure and lack adequate vegetation, emphasizing the need for continued research and policy reform to ensure equitable access to urban green spaces. 
+
+During this period, a growing awareness of environmental issues began to emerge. Land-use planning and urban development often neglect the integration of green spaces, leading to stark inequalities within the city. Areas predominantly inhabited by low-income communities and people of color were typically underserved in terms of infrastructure and green space, resulting in a disparity in health outcomes and environmental benefits compared to wealthier neighborhoods [@UrbanGreenSpaceInequality].
+
+Even before considering climate change, the urban heat island effect can have severe impacts, including changing urban ecosystems and biodiversity and exacerbating human health issues. Increasing urban temperatures can lead to health impacts such as increased exposure to extreme heat, exposure to air pollution, heat stroke, cardiorespiratory mortality, kidney disease, and mental illness, to name a few [@HeatislandHealthEffects].
+
+One of the primary benefits of urban green spaces is their ability to cool the surrounding environment. Trees and vegetation perform a vital role in reducing temperatures through evapotranspiration, where water is absorbed by roots and released as water vapor from leaves. This natural cooling effect can significantly lower urban temperatures, helping to combat the extreme heat conditions associated with the UHI effect. Research shows that areas with denser tree canopies can experience 5-10 degrees Fahrenheit temperature reductions compared to surrounding asphalt or concrete regions [@CoolingEffectsOfTrees].
+
+Additionally, urban green spaces contribute to improved air quality. Trees act as natural air filters by absorbing pollutants and providing oxygen. Green spaces have been linked to reductions in air pollutants like carbon dioxide, nitrogen dioxide, and particulate matter, thereby promoting healthier urban environments [@UrbanGreenSpacesAirQuality]. Studies indicate that residents living near green spaces report better physical and mental health outcomes, likely due to increased opportunities for physical activity, social interaction, and psychological restoration provided by nature [@HealthBenefitsOfGreenSpaces].
+
+Los Angeles is a prime example of the UHI effect as it is a large city housing millions of people with a tall, dense skyline. Asphalt and blacktop trap a significant amount of heat, making the temperatures within the five counties that make up the metropolis hotter than those in surrounding rural areas [@LAHeatIsland]. In this study, we aim to investigate how the urban heat island effect in Los Angeles is related to tree cover and income. We intend to explore if tree cover and temperature are related, and how this may be spatially associated with income. We were inspired by Schell et al. 2020 b's thoughts about the luxury effect, the idea that urban biodiversity is positively correlated with neighborhood wealth [@RacismInUrbanEnvironments]. This curiosity raised questions like: How will climate change exacerbate urban heat? Can we identify neighborhoods in Los Angeles at higher risk of urban heat health impacts? To investigate this question, the objective of our study was to answer the following question: Does decreased tree canopy contribute to increased urban temperatures and correlate to median income in Los Angeles? Our hypotheses include: 
+
+1.  As the tree canopy decreases, the mean annual temperature will increase because of the urban heat island effect. 
+
+2.  As tree canopy decreases, then mean annual income will decrease because of the historical marginalization of low-income home communities in neighborhoods with little green space in accordance with the luxury effect [@RacismInUrbanEnvironments]. 
+
+To explore these hypotheses we obtained Los Angeles-centric data on yearly average temperatures in Los Angeles from 2013 - 2023 \[INSERT REFERENCE\], tree canopy cover loss 2001 - 2023 \[INSERT REFERENCE\], and median income for 2023 \[INSERT REFERENCE\]. With R as our analysis platform, we joined these datasets and analyzed the relationships between our three variables visually with scatter plots
+
+### Data Exploration
+
+### Methods
+
+We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how landforms impact temperature and urban sprawl. To analyze this data, we plan on using Dplyr to clean the data such as select, filter, and omit NA values. Because we are using census data, we expect different periods of time for the data sets. This can be challenging depending on how far back each set goes. If the land cover data only goes back five years, there might not be significant data which would limit the analysis we will be able to do. 
+
+Once our data is cleaned, we plan to join our data sets (temperature, land cover, and income) on a common identifier (such as FIPS, city, county, or year) so that we have a common data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data, and we may need to create new columns common to all data sets so we can execute a join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution. 
+
+This joined data frame can then be analyzed to answer our question: does decreased tree canopy contribute to increased urban temperatures and correlate to median income? To answer this question, we will: 
+
+1.  Test for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis A (see Introduction); 
+
+2.  Test for correlation between tree canopy and mean annual income in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis B (see Introduction). 
+
+These methods will facilitate answering our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This will allow us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect and negative health impacts from high temperatures. 
