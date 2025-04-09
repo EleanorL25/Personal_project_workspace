@@ -1,4 +1,13 @@
 ---
+project:
+  type: website
+  output-dir: docs
+website:
+  title: "Personal project workspace"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
 title: Personal_project_workspace
 authors:
   - name: Eleanor Lindsey
@@ -14,9 +23,6 @@ authors:
     roles: writing
     corresponding: False
 bibliography: references.bib
-project:
-  type: website
-  output-dir: docs
 ---
 
 ## The Relationship of Tree Canopy to Urban Heat Effect and Inequality: A Case Study
