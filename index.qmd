@@ -14,6 +14,9 @@ authors:
     roles: writing
     corresponding: False
 bibliography: references.bib
+format: html
+execute:
+  echo: true
 ---
 
 ## The Relationship of Tree Canopy to Urban Heat Effect and Inequality: A Case Study
