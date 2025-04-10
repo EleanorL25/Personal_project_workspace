@@ -58,14 +58,19 @@ temp_data3<-read_csv(here("data/2013-2019 Temperature Data(in).csv"))
 temp_data4<-read_csv(here("data/2020-2023 Temperature Data(in).csv"))
 
 
-temperature_data<-bind_rows(temp_data1, temp_data2, temp_data3, temp_data4)
+temperature_data<-bind_rows(temp_data1, temp_data2, temp_data3, temp_data4)%>%
+  rename('Year'='DATE')%>%
+  select(-STATION)%>%
+  na.omit()
 ```
+
+Due to the way we collected our temperature data from NOAA the first thing we had to do was to load in each individual data set and then combine them by their rows. After this we removed any NA values to clean the data up.
 
 ```{r}
 
-temperature_data$DATE <- as.numeric(temperature_data$DATE)
+temperature_data$Year <- as.numeric(temperature_data$Year)
 
-str(temperature_data$DATE)
+str(temperature_data$Year)
 
 downtown_stations <- c("LOS ANGELES DOWNTOWN USC, CA US", "MALIBU HILLS CALIFORNIA, CA US")
 temperature_data_filtered <- temperature_data %>%
@@ -73,7 +78,7 @@ temperature_data_filtered <- temperature_data %>%
 
 station_labels<- c("LOS ANGELES DOWNTOWN USC, CA US"="Downtown LA","MALIBU HILLS CALIFORNIA, CA US"='Malibu Hills' )
 
-Temperature_plot <- ggplot(temperature_data_filtered, aes(x = DATE, y = TAVG, color = NAME)) +
+Temperature_plot <- ggplot(temperature_data_filtered, aes(x = Year, y = TAVG, color = NAME)) +
   geom_line() +
   scale_x_continuous(
     breaks = seq(2003, 2023, by = 2), 
@@ -91,22 +96,25 @@ Temperature_plot
 
 ```
 
-The temperature data has a yearly average temperature in LA in degrees farenheight. The data we collected ranges from 2003 to 2023 which matches the tree canopy data. The blue line represents downtown LA while the red line is the Malibu Hills. There is a noticeable difference in the decrease in temperature between the two stations. Malibu sees a more dramatic decrease in temperature in 2019 while downtown only dips slightly before climbing again.
+The temperature data is categorized by a yearly average temperature in LA in degrees farenheight. The data we collected ranges from 2003 to 2023 which matches the tree canopy data. We created a line graph comparing two of the many weather stations within LA. The blue line represents downtown LA while the red line is the Malibu Hills. There is a noticeable difference in the decrease in temperature between the two stations. Malibu sees a more dramatic decrease in temperature in 2019 while downtown only dips slightly before climbing again.
 
 ```{r}
-tree_canopy_data<-read_csv(here("data/Tree_canopy_loss/treecover_loss__ha.csv"))
+tree_canopy_data<-read_csv(here("data/Tree_canopy_loss/treecover_loss__ha.csv"))%>%
+  select(-adm1, -adm2, -iso)%>%
+  rename('Year'='umd_tree_cover_loss__year','Tree_loss_ha'='umd_tree_cover_loss__ha' )
 
-Tree_loss_plot<-ggplot(tree_canopy_data, aes(x=umd_tree_cover_loss__year, y=umd_tree_cover_loss__ha))+
+Tree_loss_plot<-ggplot(tree_canopy_data, aes(x=Year, y=Tree_loss_ha))+
   geom_area(fill="forestgreen",color="forestgreen")+
   labs(x="Year", y="Tree Canopy Loss (ha)", title="Tree Canopy Loss in LA per Year")
 Tree_loss_plot
 ```
 
-The graph presented above illustrates the amount of forest canopy that has been lost within LA per year. The graph shows a significant decrease in tree cover prior to 2010 and during 2020. When comparing the canopy loss to the temperature data there is a pattern beginning where as canopy loss increases, temperature increases. This supports our hypothesis that the two variables are interconnected.
+Reading in the tree canopy loss data we first cleaned the data up by removing any NA values and columns, and renaming useful columns. The graph presented above illustrates the amount of forest canopy that has been lost within LA per year. The graph shows a significant decrease in tree cover prior to 2010 and during 2020. When comparing the canopy loss to the temperature data there is a pattern beginning where as canopy loss increases, temperature increases. This supports our hypothesis that the two variables are interconnected. The graph we chose to use to visualize the data is an area line graph. This was a purposeful choice to easily represent the change in tree canopy.
 
 ```{r}
 
-median_income_data <- read_csv(here("data/Median_Income_and_AMI_(census_tract).csv"))
+median_income_data <- read_csv(here("data/Median_Income_and_AMI_(census_tract).csv"))%>%
+  select(-tract, -sup_dist, -ESRI_OID, -Shape__Area, -Shape__Length )
 
 Median_Pie_data <- data.frame(
   group = c('Low Income', 'Very Low Income', 'Above Moderate Income', 'Moderate Income'),
@@ -122,18 +130,41 @@ ggplot(Median_Pie_data, aes(x = "", y = value, fill = group)) +
 
 ```
 
-The census data we collected on median income is a useful tool in looking at how increasing temperatures impact people differently depending on income.
+After reading in the census data we first cleaned up the csv by removing unnecessary columns. The census data we collected on median income is a useful tool in looking at how increasing temperatures impact people differently depending on income.
+
+```{r}
+combined_Temp_tree_data<-left_join(tree_canopy_data,temperature_data, by='Year')%>%
+  rename('Temp_average'='TAVG', 'Station_name'='NAME')
+
+Combined_cor<-cor.test(combined_Temp_tree_data$Temp_average, combined_Temp_tree_data$Tree_loss_ha, method = "pearson")
+
+print(Combined_cor)
+
+```
+
+By computing a correlation test between average temperature and tree canopy loss it is determined that there is a significant correlation between the two variables. This test supports our hypothesis and can be used in further analysis to determine if there is correlation to income inequality.
+
+```{r}
+combined_income_temp<-cross_join(combined_Temp_tree_data, median_income_data)
+
+Cor_income_temp<-cor.test(combined_income_temp$Temp_average, combined_income_temp$med_hh_income, method = "pearson")
+
+print(Cor_income_temp)
+
+```
+
+Based on the basic correlation test computed between median income in LA vs average yearly temperatures, there is exceedingly high correlation. Further testing is required to confirm this result as the p-value was 1. This is incredibly uncommon for different variables and leads us to believe there is more to analyze before drawing conclusions.
 
 ### Methods
 
-We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how land forms impact temperature and urban sprawl. To analyze this data, we plan on using Dplyr to clean the data such as select, filter, and omit NA values. Because we are using census data, we expect different periods of time for the data sets. This can be challenging depending on how far back each set goes. If the land cover data only goes back five years, there might not be significant data which would limit the analysis we will be able to do. 
+We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how land forms impact temperature and urban sprawl. To analyze this data, we plan on using Dplyr to clean the data such as select, filter, and omit NA values. Because we are using census data, we expect different periods of time for the data sets. This can be challenging depending on how far back each set goes. If the land cover data only goes back five years, there might not be significant data which would limit the analysis we will be able to do.
 
-Once our data is cleaned, we plan to join our data sets (temperature, land cover, and income) on a common identifier (such as FIPS, city, county, or year) so that we have a common data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data, and we may need to create new columns common to all data sets so we can execute a join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution. 
+Once our data is cleaned, we plan to join our data sets (temperature, land cover, and income) on a common identifier (such as FIPS, city, county, or year) so that we have a common data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data, and we may need to create new columns common to all data sets so we can execute a join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution.
 
-This joined data frame can then be analyzed to answer our question: does decreased tree canopy contribute to increased urban temperatures and correlate to median income? To answer this question, we will: 
+This joined data frame can then be analyzed to answer our question: does decreased tree canopy contribute to increased urban temperatures and correlate to median income? To answer this question, we will:
 
-1.  Test for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis A (see Introduction); 
+1.  Test for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis A (see Introduction);
 
-2.  Test for correlation between tree canopy and mean annual income in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis B (see Introduction). 
+2.  Test for correlation between tree canopy and mean annual income in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis B (see Introduction).
 
-These methods will facilitate answering our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This will allow us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect and negative health impacts from high temperatures. 
+These methods will facilitate answering our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This will allow us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect and negative health impacts from high temperatures.

@@ -274,14 +274,18 @@ dbl (2): DATE, TAVG
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>temperature_data<span class="ot">&lt;-</span><span class="fu">bind_rows</span>(temp_data1, temp_data2, temp_data3, temp_data4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>temperature_data<span class="ot">&lt;-</span><span class="fu">bind_rows</span>(temp_data1, temp_data2, temp_data3, temp_data4)<span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Year'</span><span class="ot">=</span><span class="st">'DATE'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>STATION)<span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <a class="quarto-notebook-link" id="nblink-1" href="index-preview.html">Source: Article Notebook</a></div>
+<p>Due to the way we collected our temperature data from NOAA the first thing we had to do was to load in each individual data set and then combine them by their rows. After this we removed any NA values to clean the data up.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>temperature_data<span class="sc">$</span>DATE <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(temperature_data<span class="sc">$</span>DATE)</span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>temperature_data<span class="sc">$</span>Year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(temperature_data<span class="sc">$</span>Year)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(temperature_data<span class="sc">$</span>DATE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(temperature_data<span class="sc">$</span>Year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> num [1:1214] 2003 2004 2005 2005 2003 ...</code></pre>
+<pre><code> num [1:745] 2003 2004 2005 2003 2004 ...</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>downtown_stations <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LOS ANGELES DOWNTOWN USC, CA US"</span>, <span class="st">"MALIBU HILLS CALIFORNIA, CA US"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>temperature_data_filtered <span class="ot">&lt;-</span> temperature_data <span class="sc">%&gt;%</span></span>
@@ -289,7 +293,7 @@ dbl (2): DATE, TAVG
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>station_labels<span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LOS ANGELES DOWNTOWN USC, CA US"</span><span class="ot">=</span><span class="st">"Downtown LA"</span>,<span class="st">"MALIBU HILLS CALIFORNIA, CA US"</span><span class="ot">=</span><span class="st">'Malibu Hills'</span> )</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>Temperature_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(temperature_data_filtered, <span class="fu">aes</span>(<span class="at">x =</span> DATE, <span class="at">y =</span> TAVG, <span class="at">color =</span> NAME)) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>Temperature_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(temperature_data_filtered, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> TAVG, <span class="at">color =</span> NAME)) <span class="sc">+</span></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2003</span>, <span class="dv">2023</span>, <span class="at">by =</span> <span class="dv">2</span>), </span>
@@ -311,9 +315,11 @@ dbl (2): DATE, TAVG
 </div>
 </div>
 </div>
-<p>The temperature data has a yearly average temperature in LA in degrees farenheight. The data we collected ranges from 2003 to 2023 which matches the tree canopy data. The blue line represents downtown LA while the red line is the Malibu Hills. There is a noticeable difference in the decrease in temperature between the two stations. Malibu sees a more dramatic decrease in temperature in 2019 while downtown only dips slightly before climbing again.</p>
+<p>The temperature data is categorized by a yearly average temperature in LA in degrees farenheight. The data we collected ranges from 2003 to 2023 which matches the tree canopy data. We created a line graph comparing two of the many weather stations within LA. The blue line represents downtown LA while the red line is the Malibu Hills. There is a noticeable difference in the decrease in temperature between the two stations. Malibu sees a more dramatic decrease in temperature in 2019 while downtown only dips slightly before climbing again.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tree_canopy_data<span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/Tree_canopy_loss/treecover_loss__ha.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tree_canopy_data<span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/Tree_canopy_loss/treecover_loss__ha.csv"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>adm1, <span class="sc">-</span>adm2, <span class="sc">-</span>iso)<span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Year'</span><span class="ot">=</span><span class="st">'umd_tree_cover_loss__year'</span>,<span class="st">'Tree_loss_ha'</span><span class="ot">=</span><span class="st">'umd_tree_cover_loss__ha'</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr hidden">
 <pre><code>Rows: 23 Columns: 6
 ── Column specification ────────────────────────────────────────────────────────
@@ -324,7 +330,7 @@ dbl (5): adm1, adm2, umd_tree_cover_loss__year, umd_tree_cover_loss__ha, gfw...
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Tree_loss_plot<span class="ot">&lt;-</span><span class="fu">ggplot</span>(tree_canopy_data, <span class="fu">aes</span>(<span class="at">x=</span>umd_tree_cover_loss__year, <span class="at">y=</span>umd_tree_cover_loss__ha))<span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>Tree_loss_plot<span class="ot">&lt;-</span><span class="fu">ggplot</span>(tree_canopy_data, <span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>Tree_loss_ha))<span class="sc">+</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill=</span><span class="st">"forestgreen"</span>,<span class="at">color=</span><span class="st">"forestgreen"</span>)<span class="sc">+</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Year"</span>, <span class="at">y=</span><span class="st">"Tree Canopy Loss (ha)"</span>, <span class="at">title=</span><span class="st">"Tree Canopy Loss in LA per Year"</span>)</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>Tree_loss_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -336,9 +342,10 @@ dbl (5): adm1, adm2, umd_tree_cover_loss__year, umd_tree_cover_loss__ha, gfw...
 </div>
 </div>
 </div>
-<p>The graph presented above illustrates the amount of forest canopy that has been lost within LA per year. The graph shows a significant decrease in tree cover prior to 2010 and during 2020. When comparing the canopy loss to the temperature data there is a pattern beginning where as canopy loss increases, temperature increases. This supports our hypothesis that the two variables are interconnected.</p>
+<p>Reading in the tree canopy loss data we first cleaned the data up by removing any NA values and columns, and renaming useful columns. The graph presented above illustrates the amount of forest canopy that has been lost within LA per year. The graph shows a significant decrease in tree cover prior to 2010 and during 2020. When comparing the canopy loss to the temperature data there is a pattern beginning where as canopy loss increases, temperature increases. This supports our hypothesis that the two variables are interconnected. The graph we chose to use to visualize the data is an area line graph. This was a purposeful choice to easily represent the change in tree canopy.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>median_income_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/Median_Income_and_AMI_(census_tract).csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>median_income_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/Median_Income_and_AMI_(census_tract).csv"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>tract, <span class="sc">-</span>sup_dist, <span class="sc">-</span>ESRI_OID, <span class="sc">-</span>Shape__Area, <span class="sc">-</span>Shape__Length )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr hidden">
 <pre><code>Rows: 2495 Columns: 13
 ── Column specification ────────────────────────────────────────────────────────
@@ -368,18 +375,61 @@ dbl (5): med_hh_income, med_hh_income_universe, ESRI_OID, Shape__Area, Shape...
 </div>
 </div>
 </div>
-<p>The census data we collected on median income is a useful tool in looking at how increasing temperatures impact people differently depending on income.</p>
+<p>After reading in the census data we first cleaned up the csv by removing unnecessary columns. The census data we collected on median income is a useful tool in looking at how increasing temperatures impact people differently depending on income.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>combined_Temp_tree_data<span class="ot">&lt;-</span><span class="fu">left_join</span>(tree_canopy_data,temperature_data, <span class="at">by=</span><span class="st">'Year'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'Temp_average'</span><span class="ot">=</span><span class="st">'TAVG'</span>, <span class="st">'Station_name'</span><span class="ot">=</span><span class="st">'NAME'</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>Combined_cor<span class="ot">&lt;-</span><span class="fu">cor.test</span>(combined_Temp_tree_data<span class="sc">$</span>Temp_average, combined_Temp_tree_data<span class="sc">$</span>Tree_loss_ha, <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(Combined_cor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  combined_Temp_tree_data$Temp_average and combined_Temp_tree_data$Tree_loss_ha
+t = 0.69235, df = 743, p-value = 0.4889
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.04652181  0.09704331
+sample estimates:
+       cor 
+0.02539167 </code></pre>
+</div>
+</div>
+<p>By computing a correlation test between average temperature and tree canopy loss it is determined that there is a significant correlation between the two variables. This test supports our hypothesis and can be used in further analysis to determine if there is correlation to income inequality.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>combined_income_temp<span class="ot">&lt;-</span><span class="fu">cross_join</span>(combined_Temp_tree_data, median_income_data)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>Cor_income_temp<span class="ot">&lt;-</span><span class="fu">cor.test</span>(combined_income_temp<span class="sc">$</span>Temp_average, combined_income_temp<span class="sc">$</span>med_hh_income, <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(Cor_income_temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  combined_income_temp$Temp_average and combined_income_temp$med_hh_income
+t = 2.1528e-15, df = 1827483, p-value = 1
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.001449844  0.001449844
+sample estimates:
+         cor 
+1.592484e-18 </code></pre>
+</div>
+</div>
+<p>Based on the basic correlation test computed between median income in LA vs average yearly temperatures, there is exceedingly high correlation. Further testing is required to confirm this result as the p-value was 1. This is incredibly uncommon for different variables and leads us to believe there is more to analyze before drawing conclusions.</p>
 </section>
 <section id="methods" class="level3">
 <h3 class="anchored" data-anchor-id="methods">Methods</h3>
-<p>We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how land forms impact temperature and urban sprawl. To analyze this data, we plan on using Dplyr to clean the data such as select, filter, and omit NA values. Because we are using census data, we expect different periods of time for the data sets. This can be challenging depending on how far back each set goes. If the land cover data only goes back five years, there might not be significant data which would limit the analysis we will be able to do.&nbsp;</p>
-<p>Once our data is cleaned, we plan to join our data sets (temperature, land cover, and income) on a common identifier (such as FIPS, city, county, or year) so that we have a common data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data, and we may need to create new columns common to all data sets so we can execute a join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution.&nbsp;</p>
-<p>This joined data frame can then be analyzed to answer our question: does decreased tree canopy contribute to increased urban temperatures and correlate to median income? To answer this question, we will:&nbsp;</p>
+<p>We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how land forms impact temperature and urban sprawl. To analyze this data, we plan on using Dplyr to clean the data such as select, filter, and omit NA values. Because we are using census data, we expect different periods of time for the data sets. This can be challenging depending on how far back each set goes. If the land cover data only goes back five years, there might not be significant data which would limit the analysis we will be able to do.</p>
+<p>Once our data is cleaned, we plan to join our data sets (temperature, land cover, and income) on a common identifier (such as FIPS, city, county, or year) so that we have a common data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data, and we may need to create new columns common to all data sets so we can execute a join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution.</p>
+<p>This joined data frame can then be analyzed to answer our question: does decreased tree canopy contribute to increased urban temperatures and correlate to median income? To answer this question, we will:</p>
 <ol type="1">
-<li><p>Test for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis A (see Introduction);&nbsp;</p></li>
-<li><p>Test for correlation between tree canopy and mean annual income in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis B (see Introduction).&nbsp;</p></li>
+<li><p>Test for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis A (see Introduction);</p></li>
+<li><p>Test for correlation between tree canopy and mean annual income in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis B (see Introduction).</p></li>
 </ol>
-<p>These methods will facilitate answering our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This will allow us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect and negative health impacts from high temperatures.&nbsp;</p>
+<p>These methods will facilitate answering our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This will allow us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect and negative health impacts from high temperatures.</p>
 </section>
 </section>
 
@@ -806,7 +856,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","loop":false,"closeEffect":"zoom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","loop":false,"closeEffect":"zoom","openEffect":"zoom","selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
