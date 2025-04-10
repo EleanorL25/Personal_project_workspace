@@ -5,6 +5,8 @@ project:
 manuscript:
   article: index.qmd
 
+bibliography: references.bib  
+
 format:
   html:
     comments:

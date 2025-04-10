@@ -147,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
 <li><p>As the tree canopy decreases, the mean annual temperature will increase because of the urban heat island effect.&nbsp;</p></li>
 <li><p>As tree canopy decreases, then mean annual income will decrease because of the historical marginalization of low-income home communities in neighborhoods with little green space in accordance with the luxury effect <span class="citation" data-cites="RacismInUrbanEnvironments">(<a href="#ref-RacismInUrbanEnvironments" role="doc-biblioref"><strong>RacismInUrbanEnvironments?</strong></a>)</span>.&nbsp;</p></li>
 </ol>
-<p>To explore these hypotheses we obtained Los Angeles-centric data on yearly average temperatures in Los Angeles from 2013 - 2023 [INSERT REFERENCE], tree canopy cover loss 2001 - 2023 [INSERT REFERENCE], and median income for 2023 [INSERT REFERENCE]. With R as our analysis platform, we joined these datasets and analyzed the relationships between our three variables visually with scatter plots</p>
+<p>To explore these hypotheses we obtained Los Angeles-centric data on yearly average temperatures in Los Angeles from 2013 - 2023 <span class="citation" data-cites="TemperatureData">(<a href="#ref-TemperatureData" role="doc-biblioref"><strong>TemperatureData?</strong></a>)</span>, tree canopy cover loss 2001 - 2023 <span class="citation" data-cites="LATreeLoss">(<a href="#ref-LATreeLoss" role="doc-biblioref"><strong>LATreeLoss?</strong></a>)</span>, and median income for 2023 <span class="citation" data-cites="MedianIncomeCensusTract">(<a href="#ref-MedianIncomeCensusTract" role="doc-biblioref"><strong>MedianIncomeCensusTract?</strong></a>)</span>. With R as our analysis platform, we joined these datasets and analyzed the relationships between our three variables visually with scatter plots</p>
 </section>
 <section id="data-exploration" class="level3">
 <h3 class="anchored" data-anchor-id="data-exploration">Data Exploration</h3>
@@ -174,6 +174,16 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>The graph presented above illustrates the amount of forest canopy that has been lost within LA per year. The graph shows a significant decrease in tree cover prior to 2010 and during 2020. When comparing the canopy loss to the temperature data there is a pattern beginning where as canopy loss increases, temperature increases. This supports our hypothesis that the two variables are interconnected.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The census data we collected on median income is a useful tool in looking at how increasing temperatures impact people differently depending on income.</p>
 </section>
 <section id="methods" class="level3">
 <h3 class="anchored" data-anchor-id="methods">Methods</h3>
@@ -611,7 +621,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
