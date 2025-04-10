@@ -9,6 +9,7 @@ bibliography: references.bib
 
 format:
   html:
+    self-contained: True
     comments:
       hypothesis: true
   docx: default
