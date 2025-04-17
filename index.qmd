@@ -66,6 +66,8 @@ temperature_data<-bind_rows(temp_data1, temp_data2, temp_data3, temp_data4)%>%
 
 Due to the way we collected our temperature data from NOAA the first thing we had to do was to load in each individual data set and then combine them by their rows. After this we removed any NA values to clean the data up.
 
+#### Temperature Plot:
+
 ```{r}
 
 temperature_data$Year <- as.numeric(temperature_data$Year)
@@ -98,6 +100,8 @@ Temperature_plot
 
 The temperature data is categorized by a yearly average temperature in LA in degrees farenheight. The data we collected ranges from 2003 to 2023 which matches the tree canopy data. We created a line graph comparing two of the many weather stations within LA. The blue line represents downtown LA while the red line is the Malibu Hills. There is a noticeable difference in the decrease in temperature between the two stations. Malibu sees a more dramatic decrease in temperature in 2019 while downtown only dips slightly before climbing again.
 
+#### Tree Canopy Loss Plot:
+
 ```{r}
 tree_canopy_data<-read_csv(here("data/Tree_canopy_loss/treecover_loss__ha.csv"))%>%
   select(-adm1, -adm2, -iso)%>%
@@ -110,6 +114,64 @@ Tree_loss_plot
 ```
 
 Reading in the tree canopy loss data we first cleaned the data up by removing any NA values and columns, and renaming useful columns. The graph presented above illustrates the amount of forest canopy that has been lost within LA per year. The graph shows a significant decrease in tree cover prior to 2010 and during 2020. When comparing the canopy loss to the temperature data there is a pattern beginning where as canopy loss increases, temperature increases. This supports our hypothesis that the two variables are interconnected. The graph we chose to use to visualize the data is an area line graph. This was a purposeful choice to easily represent the change in tree canopy.
+
+#### Filtered Data for combined tree loss and temperature graph:
+
+```{r}
+
+station_labels <- c(
+  "LOS ANGELES DOWNTOWN USC, CA US" = "Downtown LA",
+  "MALIBU HILLS CALIFORNIA, CA US" = "Malibu Hills")
+
+filtered_data_combined <- combined_income_tree_temp %>%
+  filter(Station_name %in% c("LOS ANGELES DOWNTOWN USC, CA US", "MALIBU HILLS CALIFORNIA, CA US"))
+
+
+scale_factor <- max(combined_income_tree_temp$Tree_loss_ha, na.rm = TRUE) /
+                max(combined_income_tree_temp$Temp_average, na.rm = TRUE)
+```
+
+#### Combined plot:
+
+```{r}
+# Plot
+combined_plot <- ggplot(filtered_data_combined, aes(x = Year)) +
+  # Tree loss line
+  geom_line(aes(y = Tree_loss_ha), color = "forestgreen", size = 1) +
+  
+  # Temperature lines by station
+  geom_line(aes(y = Temp_average * scale_factor, color = Station_name), size = 1) +
+
+  scale_x_continuous(
+    breaks = seq(2003, 2023, by = 2),
+    labels = seq(2003, 2023, by = 2)
+  ) +
+  scale_y_continuous(
+    name = "Tree Canopy Loss (ha)",
+    sec.axis = sec_axis(~./scale_factor, name = "Average Temperature (°F)")
+  ) +
+  scale_color_manual(
+    values = c("LOS ANGELES DOWNTOWN USC, CA US" = "dodgerblue",
+               "MALIBU HILLS CALIFORNIA, CA US" = "firebrick"),
+    labels = station_labels,
+    name = "Weather Station"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title.y.left = element_text(color = "forestgreen"),
+    axis.text.y.left = element_text(color = "forestgreen"),
+    axis.title.y.right = element_text(color = "black"),
+    axis.text.y.right = element_text(color = "black"),
+    legend.position = "bottom"
+  ) +
+  labs(
+    title = "Tree Loss and Average Temperature by Year",
+    x = "Year"
+  )
+
+print(combined_plot)
+
+```
 
 ```{r}
 
@@ -132,11 +194,13 @@ ggplot(Median_Pie_data, aes(x = "", y = value, fill = group)) +
 
 After reading in the census data we first cleaned up the csv by removing unnecessary columns. The census data we collected on median income is a useful tool in looking at how increasing temperatures impact people differently depending on income.
 
+#### Correlation Tests:
+
 ```{r}
 combined_Temp_tree_data<-left_join(tree_canopy_data,temperature_data, by='Year')%>%
   rename('Temp_average'='TAVG', 'Station_name'='NAME')
 
-Combined_cor<-cor.test(combined_Temp_tree_data$Temp_average, combined_Temp_tree_data$Tree_loss_ha, method = "pearson")
+Combined_cor<-cor.test(combined_Temp_tree_data$Temp_average, combined_Temp_tree_data$Tree_loss_ha)
 
 print(Combined_cor)
 
@@ -145,15 +209,21 @@ print(Combined_cor)
 By computing a correlation test between average temperature and tree canopy loss it is determined that there is a significant correlation between the two variables. This test supports our hypothesis and can be used in further analysis to determine if there is correlation to income inequality.
 
 ```{r}
-combined_income_temp<-cross_join(combined_Temp_tree_data, median_income_data)
 
-Cor_income_temp<-cor.test(combined_income_temp$Temp_average, combined_income_temp$med_hh_income, method = "pearson")
+combined_income_tree_temp <- cross_join(combined_Temp_tree_data, median_income_data)
 
-print(Cor_income_temp)
+combined_income_tree_temp <- combined_income_tree_temp[-c(1:4990), ]
 
+
+tree_income_cor<- cor(combined_income_tree_temp[,c("Tree_loss_ha", "med_hh_income")])
+
+
+print(tree_income_cor)
 ```
 
-Based on the basic correlation test computed between median income in LA vs average yearly temperatures, there is exceedingly high correlation. Further testing is required to confirm this result as the p-value was 1. This is incredibly uncommon for different variables and leads us to believe there is more to analyze before drawing conclusions.
+Based on the basic correlation test computed between median income in LA vs average yearly temperatures, there is exceedingly high correlation. Further testing is required to confirm this result as the p-value was 1. This correlation tests shows no statistical evidence to support our hypothesis that tree canopy loss impacts income.
+
+#### Projections of temperature and tree canopy:
 
 ### Methods
 
