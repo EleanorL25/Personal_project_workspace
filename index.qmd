@@ -1,5 +1,5 @@
 ---
-title: Personal_project_workspace
+title: Tree Canopy and it's Impact on the Urban Heat Effect
 authors:
   - name: Eleanor Lindsey
     affiliation: Colorado State University
