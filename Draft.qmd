@@ -1,0 +1,226 @@
+---
+title: "indexpt2"
+editor: visual
+---
+
+## The Relationship of Tree Canopy to Urban Heat Effect and Inequality: A Case Study
+
+### Introduction
+
+Due to the effects of climate change, large cities like Los Angeles, California, are expected to see regularly increasing temperatures. When looking at a heat map, an odd phenomenon shows higher temperatures within city limits than in rural areas on the border. This unequal heating is called the Urban Heat Island (UHI) effect [@HeatIslandHealthEffects]. This is due to reduced vegetation cover, increased concrete, disruptive buildings, and human activities. This effect is projected to worsen as more of the world’s population migrates to urban environments, cities continue to grow, and climate change increases temperatures across the board [@HeatIslandTrends]. Areas already impacted by the UHI effect will “bear the brunt” of intensified heat waves brought on by climate change [@HeatIslandTrends].
+
+From the 1980s onward, environmental movements began to advocate for increased green space and sustainability in urban planning. Initiatives promoting tree canopy restoration, urban greening, and the creation of parks have been prioritized to mitigate the impacts of climate change and improve public health. Importantly, the city has recognized the need to address the disproportionate effects of urban heat on low-income communities. However, despite these efforts, many neighborhoods still struggle with heat exposure and lack adequate vegetation, emphasizing the need for continued research and policy reform to ensure equitable access to urban green spaces. 
+
+During this period, a growing awareness of environmental issues began to emerge. Land-use planning and urban development often neglect the integration of green spaces, leading to stark inequalities within the city. Areas predominantly inhabited by low-income communities and people of color were typically under-served in terms of infrastructure and green space, resulting in a disparity in health outcomes and environmental benefits compared to wealthier neighborhoods [@UrbanGreenSpaceInequality].
+
+Even before considering climate change, the urban heat island effect can have severe impacts, including changing urban ecosystems and biodiversity and exacerbating human health issues. Increasing urban temperatures can lead to health impacts such as increased exposure to extreme heat, exposure to air pollution, heat stroke, cardiorespiratory mortality, kidney disease, and mental illness, to name a few [@HeatislandHealthEffects].
+
+One of the primary benefits of urban green spaces is their ability to cool the surrounding environment. Trees and vegetation perform a vital role in reducing temperatures through evapotranspiration, where water is absorbed by roots and released as water vapor from leaves. This natural cooling effect can significantly lower urban temperatures, helping to combat the extreme heat conditions associated with the UHI effect. Research shows that areas with denser tree canopies can experience 5-10 degrees Fahrenheit temperature reductions compared to surrounding asphalt or concrete regions [@CoolingEffectsOfTrees].
+
+Additionally, urban green spaces contribute to improved air quality. Trees act as natural air filters by absorbing pollutants and providing oxygen. Green spaces have been linked to reductions in air pollutants like carbon dioxide, nitrogen dioxide, and particulate matter, thereby promoting healthier urban environments [@UrbanGreenSpacesAirQuality]. Studies indicate that residents living near green spaces report better physical and mental health outcomes, likely due to increased opportunities for physical activity, social interaction, and psychological restoration provided by nature [@HealthBenefitsOfGreenSpaces].
+
+Los Angeles is a prime example of the UHI effect as it is a large city housing millions of people with a tall, dense skyline. Asphalt and blacktop trap a significant amount of heat, making the temperatures within the five counties that make up the metropolis hotter than those in surrounding rural areas [@LAHeatIsland]. In this study, we aim to investigate how the urban heat island effect in Los Angeles is related to tree cover and income. We intend to explore if tree cover and temperature are related, and how this may be spatially associated with income. We were inspired by Schell et al. 2020 b's thoughts about the luxury effect, the idea that urban biodiversity is positively correlated with neighborhood wealth [@RacismInUrbanEnvironments]. This curiosity raised questions like: How will climate change exacerbate urban heat? Can we identify neighborhoods in Los Angeles at higher risk of urban heat health impacts? To investigate this question, the objective of our study was to answer the following question: Does decreased tree canopy contribute to increased urban temperatures and correlate to median income in Los Angeles? Our hypotheses include: 
+
+1.  As the tree canopy decreases, the mean annual temperature will increase because of the urban heat island effect. 
+
+2.  As tree canopy decreases, then mean annual income will decrease because of the historical marginalization of low-income home communities in neighborhoods with little green space in accordance with the luxury effect [@RacismInUrbanEnvironments]. 
+
+To explore these hypotheses we obtained Los Angeles-centric data on yearly average temperatures in Los Angeles from 2013 - 2023 [@TemperatureData], tree canopy cover loss 2001 - 2023 [@LATreeLoss], and median income for 2023 [@MedianIncomeCensusTract]. With R as our analysis platform, we joined these datasets and analyzed the relationships between our three variables visually with scatter plots
+
+### Data Exploration
+
+```{r}
+library(here)
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(lubridate)
+library(tidyverse)
+temp_data1<-read_csv(here("data/2003-2005 Temperature Data(in).csv"))
+temp_data2<-read_csv(here("data/2006-2012 Temperature Data(in).csv"))
+temp_data3<-read_csv(here("data/2013-2019 Temperature Data(in).csv"))
+temp_data4<-read_csv(here("data/2020-2023 Temperature Data(in).csv"))
+
+
+temperature_data<-bind_rows(temp_data1, temp_data2, temp_data3, temp_data4)%>%
+  rename('Year'='DATE')%>%
+  select(-STATION)%>%
+  na.omit()
+```
+
+Due to the way we collected our temperature data from NOAA the first thing we had to do was to load in each individual data set and then combine them by their rows. After this we removed any NA values to clean the data up.
+
+#### Temperature Plot:
+
+```{r}
+
+temperature_data$Year <- as.numeric(temperature_data$Year)
+
+str(temperature_data$Year)
+
+downtown_stations <- c("LOS ANGELES DOWNTOWN USC, CA US", "MALIBU HILLS CALIFORNIA, CA US")
+temperature_data_filtered <- temperature_data %>%
+  filter(NAME %in% downtown_stations)
+
+station_labels<- c("LOS ANGELES DOWNTOWN USC, CA US"="Downtown LA","MALIBU HILLS CALIFORNIA, CA US"='Malibu Hills' )
+
+Temperature_plot <- ggplot(temperature_data_filtered, aes(x = Year, y = TAVG, color = NAME)) +
+  geom_line() +
+  scale_x_continuous(
+    breaks = seq(2003, 2023, by = 2), 
+    labels = seq(2003, 2023, by = 2)) + 
+  scale_color_manual(values = c("dodgerblue", "firebrick"), labels = station_labels) +
+  labs(
+    title = "Average Temperature in Los Angeles Downtown Stations",
+    x = "Year",
+    y = "Temperature (°F)"
+  ) +
+  theme_minimal(base_size = 14)
+
+Temperature_plot
+
+
+```
+
+The temperature data is categorized by a yearly average temperature in LA in degrees farenheight. The data we collected ranges from 2003 to 2023 which matches the tree canopy data. We created a line graph comparing two of the many weather stations within LA. The blue line represents downtown LA while the red line is the Malibu Hills. There is a noticeable difference in the decrease in temperature between the two stations. Malibu sees a more dramatic decrease in temperature in 2019 while downtown only dips slightly before climbing again.
+
+#### Tree Canopy Loss Plot:
+
+```{r}
+tree_canopy_data<-read_csv(here("data/Tree_canopy_loss/treecover_loss__ha.csv"))%>%
+  select(-adm1, -adm2, -iso)%>%
+  rename('Year'='umd_tree_cover_loss__year','Tree_loss_ha'='umd_tree_cover_loss__ha' )
+
+Tree_loss_plot<-ggplot(tree_canopy_data, aes(x=Year, y=Tree_loss_ha))+
+  geom_area(fill="forestgreen",color="forestgreen")+
+  labs(x="Year", y="Tree Canopy Loss (ha)", title="Tree Canopy Loss in LA per Year")
+Tree_loss_plot
+```
+
+Reading in the tree canopy loss data we first cleaned the data up by removing any NA values and columns, and renaming useful columns. The graph presented above illustrates the amount of forest canopy that has been lost within LA per year. The graph shows a significant decrease in tree cover prior to 2010 and during 2020. When comparing the canopy loss to the temperature data there is a pattern beginning where as canopy loss increases, temperature increases. This supports our hypothesis that the two variables are interconnected. The graph we chose to use to visualize the data is an area line graph. This was a purposeful choice to easily represent the change in tree canopy.
+
+#### Median Income Pie Chart:
+
+```{r}
+
+median_income_data <- read_csv(here("data/Median_Income_and_AMI_(census_tract).csv"))%>%
+  select(-tract, -sup_dist, -ESRI_OID, -Shape__Area, -Shape__Length )
+
+Median_Pie_data <- data.frame(
+  group = c('Low Income', 'Very Low Income', 'Above Moderate Income', 'Moderate Income'),
+  value = c(20, 30, 25, 25)  # Example percentages, adjust according to your actual data
+)
+
+# Basic pie chart
+ggplot(Median_Pie_data, aes(x = "", y = value, fill = group)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+  theme(legend.title = element_blank())  
+
+```
+
+After reading in the census data we first cleaned up the csv by removing unnecessary columns. The census data we collected on median income is a useful tool in looking at how increasing temperatures impact people differently depending on income.
+
+#### Correlation Tests:
+
+```{r}
+combined_Temp_tree_data<-left_join(tree_canopy_data,temperature_data, by='Year')%>%
+  rename('Temp_average'='TAVG', 'Station_name'='NAME')
+
+Combined_cor<-cor.test(combined_Temp_tree_data$Temp_average, combined_Temp_tree_data$Tree_loss_ha)
+
+print(Combined_cor)
+
+```
+
+By computing a correlation test between average temperature and tree canopy loss it is determined that there is a significant correlation between the two variables. This test supports our hypothesis and can be used in further analysis to determine if there is correlation to income inequality.
+
+```{r}
+
+combined_income_tree_temp <- cross_join(combined_Temp_tree_data, median_income_data)
+
+combined_income_tree_temp <- combined_income_tree_temp[-c(1:4990), ]
+
+
+tree_income_cor<- cor(combined_income_tree_temp[,c("Tree_loss_ha", "med_hh_income")])
+
+
+print(tree_income_cor)
+```
+
+#### Filtered Data for combined tree loss and temperature graph:
+
+```{r}
+
+station_labels <- c(
+  "LOS ANGELES DOWNTOWN USC, CA US" = "Downtown LA",
+  "MALIBU HILLS CALIFORNIA, CA US" = "Malibu Hills")
+
+filtered_data_combined <- combined_income_tree_temp %>%
+  filter(Station_name %in% c("LOS ANGELES DOWNTOWN USC, CA US", "MALIBU HILLS CALIFORNIA, CA US"))
+
+
+scale_factor <- max(combined_income_tree_temp$Tree_loss_ha, na.rm = TRUE) /
+                max(combined_income_tree_temp$Temp_average, na.rm = TRUE)
+```
+
+#### Combined plot:
+
+```{r}
+# Plot
+combined_plot <- ggplot(filtered_data_combined, aes(x = Year)) +
+  # Tree loss line
+  geom_line(aes(y = Tree_loss_ha), color = "forestgreen", size = 1) +
+  
+  # Temperature lines by station
+  geom_line(aes(y = Temp_average * scale_factor, color = Station_name), size = 1) +
+
+  scale_x_continuous(
+    breaks = seq(2003, 2023, by = 2),
+    labels = seq(2003, 2023, by = 2)
+  ) +
+  scale_y_continuous(
+    name = "Tree Canopy Loss (ha)",
+    sec.axis = sec_axis(~./scale_factor, name = "Average Temperature (°F)")
+  ) +
+  scale_color_manual(
+    values = c("LOS ANGELES DOWNTOWN USC, CA US" = "dodgerblue",
+               "MALIBU HILLS CALIFORNIA, CA US" = "firebrick"),
+    labels = station_labels,
+    name = "Weather Station"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title.y.left = element_text(color = "forestgreen"),
+    axis.text.y.left = element_text(color = "forestgreen"),
+    axis.title.y.right = element_text(color = "black"),
+    axis.text.y.right = element_text(color = "black"),
+    legend.position = "bottom"
+  ) +
+  labs(
+    title = "Tree Loss and Average Temperature by Year",
+    x = "Year"
+  )
+
+print(combined_plot)
+
+```
+
+Based on the basic correlation test computed between median income in LA vs average yearly temperatures, there is exceedingly high correlation. Further testing is required to confirm this result as the p-value was 1. This correlation tests shows no statistical evidence to support our hypothesis that tree canopy loss impacts income.
+
+#### Projections of temperature and tree canopy:
+
+### Methods
+
+We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how land forms impact temperature and urban sprawl. To analyze this data, we plan on using Dplyr to clean the data such as select, filter, and omit NA values. Because we are using census data, we expect different periods of time for the data sets. This can be challenging depending on how far back each set goes. If the land cover data only goes back five years, there might not be significant data which would limit the analysis we will be able to do.
+
+Once our data is cleaned, we plan to join our data sets (temperature, land cover, and income) on a common identifier (such as FIPS, city, county, or year) so that we have a common data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data, and we may need to create new columns common to all data sets so we can execute a join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution.
+
+This joined data frame can then be analyzed to answer our question: does decreased tree canopy contribute to increased urban temperatures and correlate to median income? To answer this question, we will:
+
+1.  Test for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis A (see Introduction);
+
+2.  Test for correlation between tree canopy and mean annual income in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis B (see Introduction).
+
+These methods will facilitate answering our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This will allow us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect and negative health impacts from high temperatures.
