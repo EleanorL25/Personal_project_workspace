@@ -23,7 +23,7 @@ execute:
 
 # **ABSTRACT**
 
-\[Abstract\]
+This study investigates the relationship between tree canopy cover, urban temperature, and income levels in Los Angeles, California, with a focus on the Urban Heat Island (UHI) effect. As cities like Los Angeles continue to expand and global temperatures rise, urban areas are experiencing higher heat exposure, particularly in neighborhoods with limited green space. We aimed to test two main hypotheses: (1) that lower tree canopy coverage would be associated with higher temperatures, and (2) that lower canopy coverage would be correlated with lower income, based on the “luxury effect” described in previous research. Using data from 2003 to 2023, including average annual temperatures, tree canopy loss, and 2023 census tract median incomes, we conducted visual and statistical analyses to explore these relationships. While visualizations suggested a strong association between canopy loss and temperature, the Pearson correlation test did not yield statistically significant results. Additionally, our analysis found no measurable correlation between tree canopy and income, although this may be due to limitations in the data structure. Despite these challenges, our findings reinforce the importance of urban tree canopies in regulating temperature and highlight the need for more targeted, high-resolution data to understand environmental inequalities in urban heat exposure fully.
 
 # **INTRODUCTION & HYPOTHESIS**
 
@@ -49,17 +49,17 @@ To explore these hypotheses, we obtained Los Angeles-centric data on yearly aver
 
 # **METHODS**
 
-We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how landforms impact temperature and urban sprawl. To analyze this data, we plan to use Dplyr to clean it, such as selecting, filtering, and omitting NA values. Because we are using census data, we expect different periods for the datasets. This can be challenging depending on how far back each set goes. If the land cover data only goes back five years, there might not be enough significant data, which would limit the analysis we can do.
+We have compiled data sets on air temperature records, median income, and land cover. Our question pertains to the heat island effect, which is correlated to the change in air temperature within city limits. We are also looking into median income to see how the heat island effect impacts different people. The land cover data is added for further questions about how landforms impact temperature and urban sprawl. To analyze this data, we plan to use Dplyr to clean it, such as selecting, filtering, and omitting NA values. Because we are using census data, we expect different periods for the datasets. The median income data only has a five-year range, while the temperature and land cover data span from 2003 to 2023. 
 
-Once our data is cleaned, we plan to join our data sets (temperature, land cover, and income) on a common identifier, such as FIPS, city, county, or year, so that we have a common data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data types, and we may need to create new columns that are common to all data sets so we can execute a join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution.
+Once our data was cleaned, we joined our data sets (temperature, land cover, and income) using a left join on the “year” column. This was done to create a unified data frame to analyze. One challenge we anticipate is joining these data sets because our data sets focus on a variety of data types, and we may need to create new columns that are common to all data sets so we can execute a join. After analyzing the data frames, we found that each set had a year column that could be used to join. We are operating under the assumption that we have everything we need; however, once our datasets are joined, we may need supplemental data on population density to contextualize heat island increases and income distribution. 
 
-This joined data frame can then be analyzed to answer our question: Does decreased tree canopy contribute to increased urban temperatures and correlate with median income? To answer this question, we will:
+This joined data frame was then analyzed to answer our question: Does decreased tree canopy contribute to increased urban temperatures and correlate with median income? To answer this question, wel: 
 
-1.  Test for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis A (see Introduction).
+1.  Tested for correlation between tree canopy and mean annual temperature in Los Angeles using the correlation function. This corresponded to Hypothesis A (see Introduction). 
 
-2.  Test for correlation between tree canopy and mean annual income in Los Angeles using the correlation function and visualization of a scatter plot (using ggplot2) between these two variables. This corresponds to Hypothesis B (see Introduction).
+2.  Tested for correlation between tree canopy and mean annual income in Los Angeles using the correlation function. This corresponded to Hypothesis B (see Introduction). 
 
-These methods will facilitate answering our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This will allow us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect and its negative health impacts.
+These methods helped us answer our question by revealing potential relationships between tree canopy, mean annual temperature, and income. This allowed us to draw conclusions about which communities in Los Angeles should implement adaptation measures as climate change increases temperatures and exacerbates the urban heat island effect, along with its negative health impacts.
 
 # **RESULTS**
 
@@ -220,3 +220,29 @@ print(tree_income_cor)
 A result of “NA” for correlating tree canopy loss to median income has several explanations. This result can occur if there was a data cleaning error and the correlation test was performed on data with “Not Available” values, however, this study corrected the presence of NA’s during data cleaning. Other possible causes could include that our variables had very little variance, data with too few observations, or data type issues. Much like the NA value issue, this study, when carrying out its method,s confirmed that these issues were corrected. Finally, the last explanation is that R, when computing the correlation, created an output of NA to indicate that the two variables being compared were too different to compare. From these, statistically, this study found that Hypothesis B should be rejected. However, the authors of this study disagree with this statistical conclusion due to potential assumptions in the correlation test and evidence in existing literature that suggests a relationship between tree canopy and income. This will be discussed in the Discussion & Conclusions section below.
 
 # **DISCUSSION & CONCLUSIONS**
+
+Our study examined the relationship between tree canopy cover, temperature, and income in Los Angeles, focusing on how the Urban Heat Island (UHI) effect may impact different communities. While our visual data showed clear trends, such as how Downtown LA is consistently hotter than suburban areas like Malibu Hills, and how tree canopy loss has increased over time, the results from our statistical tests were more mixed.
+
+\
+
+For Hypothesis A, we expected to see a strong connection between decreasing tree canopy and increasing temperature, and visually, that relationship was there. For example, years with significant spikes in canopy loss, like 2009, were followed by steady increases in average temperature. However, when we ran a Pearson correlation test, the results weren’t statistically significant. We think this might be because the correlation test assumes a linear relationship and consistent variance, which may not apply to our data. It also doesn’t capture delayed effects, which could be important here, like temperature rising in the years after trees are removed.
+
+\
+
+Hypothesis B, which suggested that lower tree canopy would correlate with lower income, ended up giving us an “NA” in our correlation test. This could be due to several factors, such as mismatched data formats or variables that don’t align well. But from everything we’ve read and seen in class, it’s clear that tree cover and green space are not evenly distributed in LA, and that environmental inequality is a real issue. So, while the data didn’t support Hypothesis B statistically, we’re hesitant to reject it completely without further investigation.
+
+\
+
+There were some limitations to our analysis. One of the biggest was the mismatch in spatial and temporal scales across datasets. For example, our temperature data was organized by year and station, but our income data was tied to census tracts. That made it difficult to compare or join the datasets in a meaningful way directly. Also, some of the environmental patterns we were looking at might take years to play out—something our current time frame might not fully capture.
+
+\
+
+Despite these challenges, the project demonstrates how useful it can be to combine different types of data to examine environmental justice issues. It also highlighted the importance of visualizations in helping us see patterns that statistics might miss on their own. From a data science perspective, it was a good reminder that correlation doesn’t always tell the whole story, especially when dealing with complex systems like climate, urban design, and social inequality.
+
+\
+
+If we continue this research, we would want to use more localized data, such as satellite images of tree cover by neighborhood, and include population density or even heat-related health data to deepen the analysis. It would also be helpful to explore other statistical models that can handle non-linear or lagged relationships.
+
+\
+
+Overall, even though our hypotheses weren’t fully supported statistically, our findings still suggest that tree canopy plays a significant role in regulating temperature, and that communities with limited access to green space may face greater climate-related risks. As the climate continues to warm, making cities cooler and more livable should be a top priority, especially for neighborhoods that have historically been underserved.
