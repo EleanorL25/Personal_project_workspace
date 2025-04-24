@@ -102,8 +102,8 @@ station_labels<- c("LOS ANGELES DOWNTOWN USC, CA US"="Downtown LA","MALIBU HILLS
 Temperature_plot <- ggplot(temperature_data_filtered, aes(x = Year, y = TAVG, color = NAME)) +
   geom_line() +
   scale_x_continuous(
-    breaks = seq(2003, 2023, by = 3), 
-    labels = seq(2003, 2023, by = 3)) + 
+    breaks = seq(2003, 2023, by = 4), 
+    labels = seq(2003, 2023, by = 4)) + 
   scale_color_manual(values = c("dodgerblue", "firebrick"), labels = station_labels) +
   labs(
     title = "Average Temperature in Los Angeles Downtown Stations",
@@ -127,7 +127,8 @@ tree_canopy_data<-read_csv(here("data/Tree_canopy_loss/treecover_loss__ha.csv"))
 Tree_loss_plot<-ggplot(tree_canopy_data, aes(x=Year, y=Tree_loss_ha))+
   geom_area(fill="forestgreen",color="forestgreen")+
   labs(x="Year", y="Tree Canopy Loss (ha)", title="Tree Canopy Loss in LA per Year")
-ggplotly(Tree_loss_plot)
+
+Tree_loss_plot
 ```
 
 Given the hypothesized relationship between tree canopy loss and temperature due to the UHE, it is no surprise that this study also found a very strong visual correlation between these two variables. As seen below in Figure 3, temperature trends follow those of tree canopy loss in Los Angeles. While the spikes and dips are not to the same order of magnitude between these two variables, it is evident that increases in tree canopy cover loss impact temperature. For example, in 2009, there was a large decrease in tree canopy cover of over 20,000 hectares. After this spike, temperature readings in both downtown Los Angeles and Malibu Hills increase steadily for approximately the next five years. It is important to note that throughout these changes in tree canopy cover that the variation in Malibu Hills temperature records is less than that of downtown Los Angeles, further demonstrating the regulatory and cooling impact of tree canopy in developed environments.
