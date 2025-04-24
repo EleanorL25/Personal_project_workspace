@@ -74,6 +74,7 @@ library(readr)
 library(ggplot2)
 library(lubridate)
 library(tidyverse)
+library(plotly)
 temp_data1<-read_csv(here("data/2003-2005 Temperature Data(in).csv"))
 temp_data2<-read_csv(here("data/2006-2012 Temperature Data(in).csv"))
 temp_data3<-read_csv(here("data/2013-2019 Temperature Data(in).csv"))
@@ -108,8 +109,7 @@ Temperature_plot <- ggplot(temperature_data_filtered, aes(x = Year, y = TAVG, co
   ) +
   theme_minimal(base_size = 14)
 
-Temperature_plot
-
+ggplotly(Temperature_plot)
 ```
 
 In Figure 1 the temperature data is categorized by a yearly average temperature in LA in degrees Fahrenheit. These results confirm the existence of the UHE, characterized by higher and less variable temperatures in the urban environment than the suburban environment. This study then incorporated tree canopy loss as a variable influencing temperature. Figure 2 visualizes trends in tree canopy loss in Los Angeles over the same time series considered for temperature data. We can see continual tree canopy loss over the twenty years considered, characteristic of urban environments which continue to develop as population increases over time. Spikes indicate periods of elevated tree canopy loss, such as in 2009 and 2020.
@@ -124,7 +124,7 @@ tree_canopy_data<-read_csv(here("data/Tree_canopy_loss/treecover_loss__ha.csv"))
 Tree_loss_plot<-ggplot(tree_canopy_data, aes(x=Year, y=Tree_loss_ha))+
   geom_area(fill="forestgreen",color="forestgreen")+
   labs(x="Year", y="Tree Canopy Loss (ha)", title="Tree Canopy Loss in LA per Year")
-Tree_loss_plot
+ggplotly(Tree_loss_plot)
 ```
 
 Given the hypothesized relationship between tree canopy loss and temperature due to the UHE, it is no surprise that this study also found a very strong visual correlation between these two variables. As seen below in Figure 3, temperature trends follow those of tree canopy loss in Los Angeles. While the spikes and dips are not to the same order of magnitude between these two variables, it is evident that increases in tree canopy cover loss impact temperature. For example, in 2009, there was a large decrease in tree canopy cover of over 20,000 hectares. After this spike, temperature readings in both downtown Los Angeles and Malibu Hills increase steadily for approximately the next five years. It is important to note that throughout these changes in tree canopy cover that the variation in Malibu Hills temperature records is less than that of downtown Los Angeles, further demonstrating the regulatory and cooling impact of tree canopy in developed environments.
@@ -185,7 +185,7 @@ combined_plot <- ggplot(filtered_data_combined, aes(x = Year)) +
     x = "Year"
   )
 
-print(combined_plot)
+ggplotly(combined_plot)
 
 ```
 
