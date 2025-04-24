@@ -102,8 +102,8 @@ station_labels<- c("LOS ANGELES DOWNTOWN USC, CA US"="Downtown LA","MALIBU HILLS
 Temperature_plot <- ggplot(temperature_data_filtered, aes(x = Year, y = TAVG, color = NAME)) +
   geom_line() +
   scale_x_continuous(
-    breaks = seq(2003, 2023, by = 2), 
-    labels = seq(2003, 2023, by = 2)) + 
+    breaks = seq(2003, 2023, by = 3), 
+    labels = seq(2003, 2023, by = 3)) + 
   scale_color_manual(values = c("dodgerblue", "firebrick"), labels = station_labels) +
   labs(
     title = "Average Temperature in Los Angeles Downtown Stations",
