@@ -226,3 +226,27 @@ Despite these challenges, the project demonstrates how useful it can be to combi
 If we continue this research, we would want to use more localized data, such as satellite images of tree cover by neighborhood, and include population density or even heat-related health data to deepen the analysis. It would also be helpful to explore other statistical models that can handle non-linear or lagged relationships.
 
 Overall, even though our hypotheses weren’t fully supported statistically, our findings still suggest that tree canopy plays a significant role in regulating temperature, and that communities with limited access to green space may face greater climate-related risks. As the climate continues to warm, making cities cooler and more livable should be a top priority, especially for neighborhoods that have historically been underserved.
+
+### References
+
+**Jet Propulsion Laboratory.** (n.d.). *NASA maps key heat wave differences in Southern California*. NASA. <https://www.nasa.gov/centers-and-facilities/jpl/nasa-maps-key-heat-wave-differences-in-southern-california/>
+
+**Global Heat Watch.** (n.d.). *\[Title not provided\]*. <https://www.globalforestwatch.org/dashboards/country/USA/5/19/?category=forest-change&location=WyJjb3VudHJ5IiwiVVNBIiwiNSIsIjE5Il0%3D>
+
+**Weng, Q.** (2009). Thermal infrared remote sensing for urban climate and environmental studies: Methods, applications, and trends. *ISPRS Journal of Photogrammetry and Remote Sensing, 64*(4), 335–344. <https://doi.org/10.1016/j.isprsjprs.2009.03.007>
+
+**Hsu, A., Sheriff, G., Chakraborty, T., & Manya, D.** (2021). Disproportionate exposure to urban heat island intensity across major U.S. cities. *Nature Communications, 12*, Article 2721. <https://doi.org/10.1038/s41467-021-22799-5>
+
+**Chen, B., Wu, S., Song, Y., Webster, C., Xu, B., & Gong, P.** (2022). Contrasting inequality in human exposure to greenspace between cities of Global North and Global South. *Nature Communications, 13*, Article 4581. <https://doi.org/10.1038/s41467-022-32258-4>
+
+**Ziter, C. D., Pedersen, E. J., Kucharik, C. J., & Turner, M. G.** (2019). Scale-dependent interactions between tree canopy cover and impervious surfaces reduce daytime urban heat during summer. *Proceedings of the National Academy of Sciences, 116*(15), 7575–7580. <https://doi.org/10.1073/pnas.1817561116>
+
+**Nowak, D. J., Hirabayashi, S., Bodine, A., & Greenfield, E.** (2014). Tree and forest effects on air quality and human health in the United States. *Environmental Pollution, 193*, 119–129. <https://doi.org/10.1016/j.envpol.2013.05.050>
+
+**van den Bosch, M., Oude Groeniger, J., de Jong, T., & Kardan, O.** (2017). Longitudinal associations of green space with mental health in urban residents: 10-year follow-up of the GLOBE study. *Environment International, 108*, 293–302. <https://doi.org/10.1016/j.envint.2016.10.019>
+
+**Los Angeles County Department of Public Health.** (n.d.). *Median income and AMI census tract*. <https://data.lacounty.gov/Economy/Median-Income-and-AMI-census-tract/4ihp-bh6h>
+
+**National Weather Service Forecast Office.** (n.d.). *Station Fire: A meteorological perspective*. <https://www.weather.gov/media/wrh/online_publications/talite/talite1002-1.pdf>
+
+**Schell, C., Dyson, K., Fuentes, T., Des Roches, S., Harris, N., Miller, D., Woelfle-Erskine, C., & Lambert, M.** (2020). Ecological and evolutionary consequences of systemic racism in urban ecosystems. *Science, 369*(6510), eaay4497. https://doi.org/10.1126/science.aay4497
